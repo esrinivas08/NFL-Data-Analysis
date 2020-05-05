@@ -1,0 +1,76 @@
+Commands and Code:
+
+scp /Users/archana/Desktop/5200_project/predDB.csv abajine@129.150.71.75:/home/abajine
+scp /Users/archana/Desktop/5200_project/predDBInv.csv abajine@129.150.71.75:/home/abajine
+
+scp /Users/archana/Desktop/5200_project/predLB.csv abajine@129.150.71.75:/home/abajine
+
+	scp /Users/archana/Desktop/5200_project/predLBInv.csv abajine@129.150.71.75:/home/abajine
+
+scp /Users/archana/Desktop/5200_project/predWR.csv abajine@129.150.71.75:/home/abajine
+
+	scp /Users/archana/Desktop/5200_project/predWRInv.csv abajine@129.150.71.75:/home/abajine
+
+	$ ssh abajine@129.150.71.75
+
+$ hdfs dfs -ls 
+	$ hdfs dfs -mkdir NFLdata
+$ hdfs dfs -ls /user/abajine
+11.	$ hdfs dfs -put predDB.csv NFLdata
+12.	$ hdfs dfs -ls NFLdata
+13.	$ hdfs dfs -chmod -R o+w NFLdata
+14.	$ beeline
+15.	!connect jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1-bdcsce-2:2181,bigdai1-bdcsce-3:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2?tez.queue.name=interactive bdcsce_admin
+16.	 jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1 >show databases;
+17.	CREATE database IF NOT EXISTS your_username;
+18.	 jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> use abajine;
+19.	CREATE EXTERNAL TABLE IF NOT EXISTS PredDB(Field_Type STRING, Play_Type STRING, Roster_Position STRING, Stadium_Type STRING, Temperature INT, Weather STRING, Time FLOAT, predict STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE LOCATION '/user/abajine/NFLdata'
+TBLPROPERTIES ('skip.header.line.count'='2');
+20.	1: jdbc: hive2://bigdai1-bdcsce-1:2181,bigdai1> show tables;
+21.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> describe predDB;
+22.	1: jdbc: hive2://bigdai1-bdcsce-1:2181,bigdai1> select * from predDB limit 5;
+23.	1: jdbc: hive2://bigdai1-bdcsce-1:2181,bigdai1> Select predict, count (*) AS count FROM preddb group by predict order by count;
+24.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> Select Field_Type ,count (*) AS count FROM preddb group by Field_Type order by count;
+25.	1: jdbc: hive2://bigdai1-bdcsce-1:2181,bigdai1> Select Field_Type, Stadium_Type, predict, count (*) AS count FROM preddb group by Field_Type,Stadium_Type,predict order by count;
+26.	$ hdfs dfs -put predLB.csv NFLdata
+27.	CREATE EXTERNAL TABLE IF NOT EXISTS PredLB(Field_Type STRING, Play_Type STRING, Roster_Position STRING, Stadium_Type STRING, Temperature INT, Weather STRING, Time FLOAT, predict STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE LOCATION '/user/abajine/NFLdata'
+TBLPROPERTIES ('skip.header.line.count'='2');
+28.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> show tables;
+29.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> describe predLB;
+30.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> select * from predLB limit 5;
+31.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> Select predict ,count (*) AS count FROM predlb group by predict order by count;
+32.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> Select Field_Type ,count (*) AS count FROM predlb group by Field_Type order by count;
+33.	Select Field_Type, Play_Type, predict, count (*) AS count FROM predlb group by Field_Type, Play_Type, predict order by count;
+34.	$ hdfs dfs -put predWR.csv NFLdata
+35.	CREATE EXTERNAL TABLE IF NOT EXISTS PredWR(Field_Type STRING, Play_Type STRING, Roster_Position STRING, Stadium_Type STRING, Temperature INT, Weather STRING, Time FLOAT, predict STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE LOCATION '/user/abajine/NFLdata'
+TBLPROPERTIES ('skip.header.line.count'='2');
+36.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> show tables;
+37.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> describe predWR;
+38.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> select * from predWR limit 5;
+39.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> Select Stadium_Type ,count (*) AS count FROM predwr group by Stadium_Type order by count;
+40.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> Select Field_Type ,count (*) AS count FROM predwr group by Field_Type order by count;
+41.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> Select Field_Type,Play_Type,Stadium_Type, count (*) AS count FROM predwr group by Field_Type,Play_Type,Stadium_Type order by count;
+42.	$ hdfs dfs -ls NFLdata
+43.	1: jdbc:hive2://bigdai1-bdcsce-1:2181,bigdai1> show tables;
+44.	$ hdfs dfs -get /user/abajine/NFLdata/predDB.csv log4_result.out
+45.	$ cat log4_result.out
+46.	$ scp abajine@129.150.71.75:/home/abajine/log4_result.out .
+47.	$ ls
+48.	$ hdfs dfs -get /user/abajine/NFLdata/predLB.csv log5_result.out
+
+49.	-bash-4.2$ cat log5_result.out
+50.	$ scp abajine@129.150.71.75:/home/abajine/log5_result.out .
+
+51.	$ ls
+$ hdfs dfs -get /user/abajine/NFLdata/predWR.csv log6_result.out
+
+-bash-4.2$ cat log6_result.out
+scp abajine@129.150.71.75:/home/abajine/log6_result.out .
+ls
+
+
+
+
